@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+    
+
+    <arg name="use_sim_time" default="True"/>
+    <include file="$(find-pkg-share toybox_description)/launch/rviz.launch.xml">
+        <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    </include>
+
+    <include file="$(find-pkg-share gazebo_ros)/launch/gazebo.launch.py"/>
+
+    <node pkg="gazebo_ros" exec="spawn_entity.py" args="-topic robot_description -entity toybox"/>
+
+</launch>

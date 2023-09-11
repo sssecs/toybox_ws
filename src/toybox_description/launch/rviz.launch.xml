@@ -1,14 +1,16 @@
 <launch>
+    <arg name="use_sim_time" default="True"/>
+
     <node pkg="robot_state_publisher" exec="robot_state_publisher">
         <param name="robot_description" value="$(command 'xacro $(find-pkg-share toybox_description)/description/robot.urdf.xacro')"/>
-        <param name="use_sim_time" value="True"/>
+        <param name="use_sim_time" value="$(var use_sim_time)"/>
     </node>
-    <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui"/>
+    
+    <!-- <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui"/> -->
     
 
     <node pkg="rviz2" exec="rviz2">
         <param name="-d" value="$(find-pkg-share toybox_description)/config/config.rviz"/>
-        
     </node>
   
 
