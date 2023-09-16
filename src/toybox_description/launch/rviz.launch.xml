@@ -9,9 +9,9 @@
     <!-- <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui"/> -->
     
 
-    <node pkg="rviz2" exec="rviz2">
+    <!-- <node pkg="rviz2" exec="rviz2">
         <param name="-d" value="$(find-pkg-share toybox_description)/config/config.rviz"/>
-    </node>
+    </node> -->
   
 
 </launch>
