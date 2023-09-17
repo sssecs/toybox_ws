@@ -14,6 +14,12 @@
     <node pkg="controller_manager" exec="spawner.py" args="joint_broad"/>
     
     <node pkg="controller_manager" exec="spawner.py" args="diff_cont"/>
+
+    <include file="$(find-pkg-share toybox_description)/launch/joystick.launch.xml">
+        <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    </include>
+        
+
     
 
 </launch>
