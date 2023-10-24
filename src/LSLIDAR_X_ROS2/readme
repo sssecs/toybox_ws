@@ -1,0 +1,6 @@
+sudo gedit /etc/udev/rules.d/usb.rules 
+
+KERNELS=="1-1.2:1.0",MODE:="0777", GROUP:="dialout", SYMLINK+="wheeltec_laser"
+
+sudo udevadm control --reload-rules
+sudo udevadm trigger
