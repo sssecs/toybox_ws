@@ -3,7 +3,7 @@
     <joint name="laser_joint" type="fixed">
         <parent link="base_link"/>
         <child link="laser_frame"/>
-        <origin xyz="0.13 0.0 0.09" rpy="0.0 0.0 0.0"/>
+        <origin xyz="0.13 0.0 0.085" rpy="0.0 0.0 0.0"/>
     </joint>
 
     <link name="laser_frame">
@@ -33,7 +33,7 @@
     <gazebo reference="laser_frame">
         <sensor name="laser" type="ray">
         <pose> 0 0 0 0 0 0 </pose>
-        <visualize>true</visualize>
+        <visualize>false</visualize>
         <update_rate>10</update_rate>
         <ray>
             <scan>
