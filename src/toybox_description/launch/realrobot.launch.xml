@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+    
+
+    <arg name="use_sim_time" default="false"/>
+    <include file="$(find-pkg-share toybox_description)/launch/rviz.launch.xml">
+        <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    </include>
+
+
+    <node pkg="controller_manager" exec="ros2_control_node" name="ros2_control_node">
+        <param name="robot_description" value="$(command 'ros2 param get --hide-type /robot_state_publisher robot_description')"/>
+        <param from="$(find-pkg-share toybox_description)/config/controllers.yaml"/>
+    </node>
+
+
+
+    <include file="$(find-pkg-share toybox_description)/launch/joystick.launch.xml">
+        <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    </include>
+        
+
+    
+
+</launch>
