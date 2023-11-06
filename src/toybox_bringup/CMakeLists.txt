@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(toybox_description)
+project(toybox_bringup)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -33,8 +33,8 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY description launch config hardware
-  DESTINATION share/${PROJECT_NAME}/
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()
