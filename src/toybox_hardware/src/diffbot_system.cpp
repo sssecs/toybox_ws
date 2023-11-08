@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "ros2_control_demo_hardware/diffbot_system.hpp"
+#include "diffbot_system.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -23,7 +23,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-namespace ros2_control_demo_hardware
+namespace toybox_hardware
 {
 hardware_interface::return_type DiffBotSystemHardware::configure(
   const hardware_interface::HardwareInfo & info)
@@ -163,15 +163,15 @@ hardware_interface::return_type DiffBotSystemHardware::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type ros2_control_demo_hardware::DiffBotSystemHardware::write()
+hardware_interface::return_type toybox_hardware::DiffBotSystemHardware::write()
 {
   this->toybox_comms.send_rad_velo(this->wheel_param_l_.velo_cmd, this->wheel_param_r_.velo_cmd);
 
   return hardware_interface::return_type::OK;
 }
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace toybox_hardware
 
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(
-  ros2_control_demo_hardware::DiffBotSystemHardware, hardware_interface::SystemInterface)
+  toybox_hardware::DiffBotSystemHardware, hardware_interface::SystemInterface)

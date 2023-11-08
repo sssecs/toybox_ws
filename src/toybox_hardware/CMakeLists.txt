@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ros2_control_demo_hardware)
+project(toybox_hardware)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -37,9 +37,9 @@ ament_target_dependencies(
   rclcpp
 )
 
-target_link_libraries(ros2_control_demo_hardware serial)
+target_link_libraries(toybox_hardware serial)
 
-pluginlib_export_plugin_description_file(hardware_interface ros2_control_demo_hardware.xml)
+pluginlib_export_plugin_description_file(hardware_interface toybox_hardware.xml)
 
 # INSTALL
 install(

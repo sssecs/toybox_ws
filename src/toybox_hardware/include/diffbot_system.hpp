@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
-#define ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
+#ifndef TOYBOX_HARDWARE__DIFFBOT_SYSTEM_HPP_
+#define TOYBOX_HARDWARE__DIFFBOT_SYSTEM_HPP_
 
 #include <memory>
 #include <string>
@@ -26,10 +26,10 @@
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
 #include "hardware_interface/types/hardware_interface_status_values.hpp"
 #include "rclcpp/macros.hpp"
-#include "ros2_control_demo_hardware/visibility_control.h"
-#include "ros2_control_demo_hardware/stm32_comms.h"
+#include "visibility_control.h"
+#include "stm32_comms.h"
 
-namespace ros2_control_demo_hardware
+namespace toybox_hardware
 {
 
 struct WheelParam 
@@ -46,25 +46,25 @@ class DiffBotSystemHardware
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(DiffBotSystemHardware);
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  TOYBOX_HARDWARE_PUBLIC
   hardware_interface::return_type configure(const hardware_interface::HardwareInfo & info) override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  TOYBOX_HARDWARE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  TOYBOX_HARDWARE_PUBLIC
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  TOYBOX_HARDWARE_PUBLIC
   hardware_interface::return_type start() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  TOYBOX_HARDWARE_PUBLIC
   hardware_interface::return_type stop() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  TOYBOX_HARDWARE_PUBLIC
   hardware_interface::return_type read() override;
 
-  ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+  TOYBOX_HARDWARE_PUBLIC
   hardware_interface::return_type write() override;
 
 private:
@@ -75,6 +75,6 @@ private:
   
 };
 
-}  // namespace ros2_control_demo_hardware
+}  // namespace toybox_hardware
 
-#endif  // ROS2_CONTROL_DEMO_HARDWARE__DIFFBOT_SYSTEM_HPP_
+#endif  // TOYBOX_HARDWARE__DIFFBOT_SYSTEM_HPP_
