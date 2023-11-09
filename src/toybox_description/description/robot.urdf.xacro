@@ -13,6 +13,10 @@
         <xacro:include filename="gazebo_control.xacro" />
     </xacro:unless>
 
+    <xacro:if value="$(arg use_sim_time)">
+        <xacro:include filename="gazebo_p3d.xacro" />
+    </xacro:if>
+
     <xacro:include filename="lidar.xacro"/>
     <xacro:include filename="depth_camera.xacro"/>
 </robot>
