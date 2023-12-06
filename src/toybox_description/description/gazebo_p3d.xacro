@@ -5,7 +5,7 @@
         <plugin name="libgazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
             <ros>
                 <namespace>p3d</namespace>
-                <remapping>odom:=odom</remapping>
+                <remapping>odom:=odom_p3d</remapping>
             </ros>
             <frame_name>map</frame_name>
             <body_name>base_link</body_name>
