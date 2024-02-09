@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
 import pickle
+from toybox_interfaces.srv import Switch
 
 
 class DataLogger(Node):
@@ -18,7 +19,7 @@ class DataLogger(Node):
             self.p3d_subscriber_callback,
             10)
         self.timer = self.create_timer(0.2, self.timer_callback)
-        self.record_switch = self.create_service(bool, 'record_switch', self.switch_callback)
+        self.record_switch = self.create_service(Switch, 'record_switch', self.switch_callback)
         self.odom_data = Odometry
         self.p3d_data = Odometry
         self.record_switch = False
@@ -38,7 +39,10 @@ class DataLogger(Node):
                 print("Error during pickling object (Possibly unsupported):", ex)
 
     def switch_callback(self, request, response):
-        self.record_switch = request
+        self.record_switch = request.switch_cmd
+        response.switch_return = self.record_switch
+        return response
+
         
 
 def main(args=None):
