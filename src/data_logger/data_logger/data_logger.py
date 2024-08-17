@@ -85,12 +85,10 @@ class DataLogger(Node):
             
             odom_list = [self.odom_data._pose._pose.position.x, 
                          self.odom_data._pose._pose.position.y, 
-                         self.odom_data._pose._pose.position, 
                          self.yaw_from_quaternion(self.odom_data)]
             
             p3d_list = [self.p3d_data._pose._pose.position.x, 
                         self.p3d_data._pose._pose.position.y, 
-                        self.p3d_data._pose._pose.position, 
                         self.yaw_from_quaternion(self.p3d_data)]
             
             self.odom_record_list.append(odom_list)
@@ -104,9 +102,9 @@ class DataLogger(Node):
         if not request.switch_cmd:
             try:
                 with open("/home/sykes/toybox_ws/scrip/data/odom.pickle", "wb") as file:
-                    pickle.dump(self.odom_data, file, protocol=pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(self.odom_record_list, file, protocol=pickle.HIGHEST_PROTOCOL)
                 with open("/home/sykes/toybox_ws/scrip/data/p3d.pickle", "wb") as file:
-                    pickle.dump(self.p3d_data, file, protocol=pickle.HIGHEST_PROTOCOL)
+                    pickle.dump(self.p3d_record_list, file, protocol=pickle.HIGHEST_PROTOCOL)
                 with open("/home/sykes/toybox_ws/scrip/data/pc2.pickle", "wb") as file:
                     pickle.dump(self.pc2_record_list, file, protocol=pickle.HIGHEST_PROTOCOL)    
             except Exception as ex:
