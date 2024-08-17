@@ -6,30 +6,40 @@ import sensor_msgs_py.point_cloud2 as pc2
 import pickle
 from toybox_interfaces.srv import Switch
 import numpy as np
-import open3d
-
+import math
 
 
 
 class DataLogger(Node):
-    def convertCloudFromRosToOpen3d(self,ros_cloud):
-        
-        # Get cloud data from ros_cloud
-        field_names=[field.name for field in ros_cloud.fields]
-        cloud_data = list(pc2.read_points(ros_cloud, skip_nans=True, field_names = field_names))
+    import math
+ 
+    def yaw_from_quaternion(self,odom_msg):
+        """
+        Convert a quaternion into euler angles (roll, pitch, yaw)
+        roll is rotation around x in radians (counterclockwise)
+        pitch is rotation around y in radians (counterclockwise)
+        yaw is rotation around z in radians (counterclockwise)
+        """
+        x = odom_msg._pose._pose.orientation.x
+        y = odom_msg._pose._pose.orientation.y
+        z = odom_msg._pose._pose.orientation.z
+        w = odom_msg._pose._pose.orientation.w
 
-        # Check empty
-        open3d_cloud = open3d.geometry.PointCloud()
-        if len(cloud_data)==0:
-            print("Converting an empty cloud")
-            return None
+        t0 = +2.0 * (w * x + y * z)
+        t1 = +1.0 - 2.0 * (x * x + y * y)
+        roll_x = math.atan2(t0, t1)
+    
+        t2 = +2.0 * (w * y - z * x)
+        t2 = +1.0 if t2 > +1.0 else t2
+        t2 = -1.0 if t2 < -1.0 else t2
+        pitch_y = math.asin(t2)
+    
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        yaw_z = math.atan2(t3, t4)
+    
+        return yaw_z # in radians
 
-        # Set open3d_cloud
-        xyz = [(x,y,z) for x,y,z,a,b in cloud_data ] # get xyz
-        open3d_cloud.points = open3d.utility.Vector3dVector(np.array(xyz))
-
-        # return
-        return open3d_cloud
     def __init__(self):
         super().__init__('data_logger')
         self.odom_subscriber = self.create_subscription(
@@ -51,6 +61,11 @@ class DataLogger(Node):
         self.pc2_data = PointCloud2
         self.record_switch = False
 
+        self.odom_record_list = []
+        self.p3d_record_list = []
+        self.pc2_record_list = []
+        
+
     def odom_subscriber_callback(self, msg):
         self.odom_data = msg
 
@@ -63,16 +78,42 @@ class DataLogger(Node):
 
     def record(self):
         if self.record_switch:
-            open_3d_data = self.convertCloudFromRosToOpen3d(self.pc2_data)
-            try:
-                with open("/home/sykes/data.pickle", "wb") as f:
-                    pickle.dump((self.p3d_data,self.odom_data,open_3d_data), f, protocol=pickle.HIGHEST_PROTOCOL)
-            except Exception as ex:
-                print("Error during pickling object (Possibly unsupported):", ex)
+            field_names=[field.name for field in self.pc2_data.fields]
+            point_cloud_data = list(pc2.read_points(self.pc2_data, skip_nans=True, field_names = field_names))
+
+            pc2_list = [(x,y,z) for x,y,z,a,b in point_cloud_data ]
+            
+            odom_list = [self.odom_data._pose._pose.position.x, 
+                         self.odom_data._pose._pose.position.y, 
+                         self.odom_data._pose._pose.position, 
+                         self.yaw_from_quaternion(self.odom_data)]
+            
+            p3d_list = [self.p3d_data._pose._pose.position.x, 
+                        self.p3d_data._pose._pose.position.y, 
+                        self.p3d_data._pose._pose.position, 
+                        self.yaw_from_quaternion(self.p3d_data)]
+            
+            self.odom_record_list.append(odom_list)
+            self.p3d_record_list.append(p3d_list)
+            self.pc2_record_list.append(pc2_list)
+
 
     def switch_callback(self, request, response):
         self.record_switch = request.switch_cmd
         response.switch_return = self.record_switch
+        if not request.switch_cmd:
+            try:
+                with open("/home/sykes/toybox_ws/scrip/data/odom.pickle", "wb") as file:
+                    pickle.dump(self.odom_data, file, protocol=pickle.HIGHEST_PROTOCOL)
+                with open("/home/sykes/toybox_ws/scrip/data/p3d.pickle", "wb") as file:
+                    pickle.dump(self.p3d_data, file, protocol=pickle.HIGHEST_PROTOCOL)
+                with open("/home/sykes/toybox_ws/scrip/data/pc2.pickle", "wb") as file:
+                    pickle.dump(self.pc2_record_list, file, protocol=pickle.HIGHEST_PROTOCOL)    
+            except Exception as ex:
+                print("Error during pickling object (Possibly unsupported):", ex)  
+            self.odom_record_list = []
+            self.p3d_record_list = []
+            self.pc2_record_list = []
         return response
 
         
