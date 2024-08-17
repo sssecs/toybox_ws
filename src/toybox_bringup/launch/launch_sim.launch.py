@@ -40,7 +40,6 @@ def generate_launch_description():
                                    '-entity', 'toybox'],
                         output='screen')
 
-
     diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner.py",
@@ -53,6 +52,9 @@ def generate_launch_description():
         arguments=["joint_broad"],
     )
 
+    laser_to_tf2 = Node(package='laser_to_pc2', executable='laser_to_pc2')
+
+    data_logger = Node(package='data_logger', executable='data_logger')
 
     # Code for delaying a node (I haven't tested how effective it is)
     # 
@@ -78,5 +80,7 @@ def generate_launch_description():
         gazebo,
         spawn_entity,
         diff_drive_spawner,
-        joint_broad_spawner
+        joint_broad_spawner,
+        laser_to_tf2,
+        data_logger
     ])
